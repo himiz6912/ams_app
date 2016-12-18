@@ -1,0 +1,255 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#cdcdcd"
+    tools:context="jp.hmproject.ams_app.MainActivityFragment"
+    tools:showIn="@layout/activity_main">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:padding="8dp"
+            android:background="#ffffff" >
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right"
+                android:background="@drawable/close"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="1dp"
+                android:paddingRight="1dp"
+                android:background="#008000"
+                android:id="@+id/ll1" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="center"
+                    android:background="@drawable/time"/>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#ffffff"
+                    android:textSize="10dp"
+                    android:text="START TIME" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#dcdcdc"
+                    android:text="Unregistered"
+                    android:textColor="#808080"
+                    android:id="@+id/start" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="1dp"
+                android:paddingRight="1dp"
+                android:background="#008000"
+                android:id="@+id/ll2" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="center"
+                    android:background="@drawable/building"/>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#ffffff"
+                    android:textSize="10dp"
+                    android:text="LOCATION" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#dcdcdc"
+                    android:text="Unregistered"
+                    android:textColor="#808080"
+                    android:id="@+id/location" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="1dp"
+                android:paddingRight="1dp"
+                android:background="#008000"
+                android:id="@+id/ll3" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="center"
+                    android:background="@drawable/search"/>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#ffffff"
+                    android:textSize="10dp"
+                    android:text="SYSTEM" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#dcdcdc"
+                    android:text="Unregistered"
+                    android:textColor="#808080"
+                    android:id="@+id/system" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="1dp"
+                android:paddingRight="1dp"
+                android:background="#008000"
+                android:id="@+id/ll4" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="center"
+                    android:background="@drawable/work"/>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#ffffff"
+                    android:textSize="10dp"
+                    android:text="OPERATION" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#dcdcdc"
+                    android:text="Unregistered"
+                    android:textColor="#808080"
+                    android:id="@+id/work" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="1dp"
+                android:paddingRight="1dp"
+                android:background="#008000"
+                android:id="@+id/ll5" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="center"
+                    android:background="@drawable/time"/>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#ffffff"
+                    android:textSize="10dp"
+                    android:text="END TIME" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#dcdcdc"
+                    android:text="Unregistered"
+                    android:textColor="#808080"
+                    android:id="@+id/end" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="1dp"
+                android:paddingRight="1dp"
+                android:background="#008000"
+                android:id="@+id/ll6" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="80dp"
+                    android:scaleType="center"
+                    android:scaleX="1"
+                    android:scaleY="0.5"
+                    android:background="@drawable/memo"/>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="80dp"
+                    android:textAlignment="textStart"
+                    android:textColor="#ffffff"
+                    android:textSize="10dp"
+                    android:text="MEMO" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="1dp"
+                    android:background="#dcdcdc"
+                    android:text="Unregistered"
+                    android:textColor="#808080"
+                    android:id="@+id/memo" />
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#cd5c5c"
+                android:text="ENTER"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:layout_margin="16dp"
+                android:id="@+id/enter" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:padding="8dp"
+        android:background="#cccccc" >
+
+    </LinearLayout>
+
+</LinearLayout>
