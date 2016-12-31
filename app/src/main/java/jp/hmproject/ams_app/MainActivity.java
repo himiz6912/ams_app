@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                doCommand("END");
+                doCommand("APP_FINISH");
             }
         });
         ab.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG,"ServiceConnection:" + e.getMessage());
             }
             if(ams_remote != null){
-                doCommand("INIT");
+                doCommand("APP_INIT");
             }
         }
         @Override

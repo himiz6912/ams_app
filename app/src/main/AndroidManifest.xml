@@ -14,16 +14,18 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <service
             android:name=".AMS_Service"
             android:enabled="true"
-            android:exported="true"></service>
-        <receiver android:name=".Startup_Receiver">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="jp.hmproject.ams_app.AMS_Remote" />
+            </intent-filter>
+        </service>
+        <receiver android:name=".StartupReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />
