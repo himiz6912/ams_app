@@ -27,12 +27,14 @@ public class AMS_Data {
     public AMS_Data() {
     }
 
-    public void setTraceData(float accuracy,double latitude, double longitude, Date generation) {
+    public void setTraceData(float accuracy,double latitude, double longitude,
+                             Date generation, Date registration) {
         this.flag = 0;
         this.event = 4;
         this.accuracy = accuracy;
         this.latitude = latitude;
         this.longitude = longitude;
         this.generation = generation;
+        this.registration = registration;
     }
 }

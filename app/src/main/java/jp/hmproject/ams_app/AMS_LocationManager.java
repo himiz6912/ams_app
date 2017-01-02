@@ -21,6 +21,8 @@ public class AMS_LocationManager implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
     protected static final String TAG = "AMS_LocationManager";
+    private AMS_LocationManagerListener listener;
+
     protected GoogleApiClient mGoogleApiClient;
     protected LocationRequest mLocationRequest;
     protected Location mCurrentLocation;
@@ -68,16 +70,16 @@ public class AMS_LocationManager implements GoogleApiClient.ConnectionCallbacks,
         }catch(SecurityException e){
             Log.e(TAG,"onConnected:" + e.getMessage());
         }
-        if (mRequestingLocationUpdates) {
-            startLocationUpdates();
-        }
+        listener.locationServiceConnected();
     }
     @Override
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
-        mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        listener.changeLocationData();
+        mLastUpdateTime = DateFormat.getTimeInstance().format(mCurrentLocation.getTime());
         Log.i(TAG,"UPDATE:" + mLastUpdateTime + " ,LON:" + mCurrentLocation.getLongitude()
                 + " ,LAT:" + mCurrentLocation.getLatitude());
+        stopLocationUpdates();
     }
     @Override
     public void onConnectionSuspended(int cause) {
@@ -109,7 +111,6 @@ public class AMS_LocationManager implements GoogleApiClient.ConnectionCallbacks,
     public void updateSetting(int interval){
         stopUpdating();
         createLocationRequest(interval);
-        startUpdating();
     }
     public Location getLocationData(){
         return mCurrentLocation;
@@ -119,5 +120,9 @@ public class AMS_LocationManager implements GoogleApiClient.ConnectionCallbacks,
     }
     public void close() {
         mGoogleApiClient.disconnect();
+    }
+
+    public void setListener(AMS_LocationManagerListener listener){
+        this.listener = listener;
     }
 }

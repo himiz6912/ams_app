@@ -23,7 +23,7 @@ am broadcast -a android.intent.action.BOOT_COMPLETED
  */
 
 public class AMS_Service extends Service implements
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener,AMS_LocationManagerListener {
 
     final String TAG = "AMS_Service";
     private final String[] status = {"FINISH", "INIT", "SUSPEND", "NORMAL"};
@@ -39,6 +39,7 @@ public class AMS_Service extends Service implements
     private int sendingTime;
     private int tCount;
     private int sCount;
+    private Date requestDate;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -48,7 +49,6 @@ public class AMS_Service extends Service implements
         }
         ;
         return null;
-//        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     private AMS_Remote.Stub binder = new AMS_Remote.Stub() {
@@ -161,6 +161,24 @@ public class AMS_Service extends Service implements
             }
         }
     }
+    @Override
+    public void changeLocationData() {
+        Location location = alm.getLocationData();
+        if(location != null) {
+            AMS_Data ams_data = new AMS_Data();
+            ams_data.setTraceData(location.getAccuracy(),location.getLatitude(),
+                    location.getLongitude(),new Date(location.getTime()),requestDate);
+            dbm.setTraceData(ams_data);
+            Log.d("TEST", "Location:" + location.getLatitude() + "," + location.getLongitude());
+            requestDate = null;
+        }else{
+            Log.d("TEST", "Can't get the location data.");
+        }
+    }
+    @Override
+    public void locationServiceConnected() {
+        doTracing();
+    }
 
 
     //
@@ -212,11 +230,12 @@ public class AMS_Service extends Service implements
             e.putString("Tracing", "6");
             e.putString("Sending", "3000");
             e.commit();
-            setLastActiveDate();
         }
         tracingTime = Integer.parseInt(sp.getString("Tracing", "60"));
         sendingTime = Integer.parseInt(sp.getString("Sending", "3000"));
         alm = new AMS_LocationManager(this,tracingTime);
+        alm.setListener(this);
+        doTracing();
     }
 
     private void startLocationService(){
@@ -230,15 +249,9 @@ public class AMS_Service extends Service implements
     }
 
     private void doTracing() {
-        Location location = alm.getLocationData();
-        if(location != null) {
-            AMS_Data ams_data = new AMS_Data();
-            ams_data.setTraceData(location.getAccuracy(),location.getLatitude(),
-                    location.getLongitude(),new Date());
-            dbm.setTraceData(ams_data);
-            Log.d("TEST", "Lati:" + location.getLatitude() + " Long:" + location.getLongitude());
-        }else{
-            Log.d("TEST", "Can't get the lcation data.");
+        if(requestDate == null){
+            requestDate = new Date();
+            alm.startUpdating();
         }
         tCount = 0;
     }
