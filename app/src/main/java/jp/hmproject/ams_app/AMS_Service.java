@@ -245,7 +245,7 @@ public class AMS_Service extends Service implements
 
     private void sendAllTracedData(){
         String s = dbm.getAllTraceData();
-        broadcast(s);
+        broadcast("TRACE_DATA:" + s);
     }
 
     private void doSending() {

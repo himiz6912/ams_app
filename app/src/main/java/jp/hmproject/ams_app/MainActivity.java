@@ -184,8 +184,9 @@ public class MainActivity extends AppCompatActivity {
             }else if(msg.equals("END")) {
                 finish();
             }
-        }else if(msg.equals("TRACE_DATA")){
-            showTracedData(msg);
+        }else if(msg.substring(0,10).equals("TRACE_DATA")){
+            String s = msg.substring(11);
+            showTracedData(s);
         }
     }
 

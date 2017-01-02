@@ -60,17 +60,17 @@ public class AMS_DBManager {
                             "event INTEGER NOT NULL," +
                             "accuracy REAL," +
                             "latitude REAL," +
-                            "longitude REAL" +
+                            "longitude REAL," +
                             "generation TEXT," +
                             "registration TEXT," +
                             "user TEXT," +
-                            "location TEXT" +
-                            "system TEXT" +
-                            "operation TEXT" +
-                            "remarks TEXT" +
-                            "twopeople INTEGER" +
-                            "dailysubcon INTEGER" +
-                            "sending TEXT" +
+                            "location TEXT," +
+                            "system TEXT," +
+                            "operation TEXT," +
+                            "remarks TEXT," +
+                            "twopeople INTEGER," +
+                            "dailysubcon INTEGER," +
+                            "sending TEXT," +
                             "revise TEXT" +
                             ");"
 
