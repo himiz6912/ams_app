@@ -229,7 +229,7 @@ public class AMS_Service extends Service implements
             e.putString("Server", "0.0.0.0/24");
             e.putString("Port", "60001");
             e.putString("Protocol", "HTTP");
-            e.putString("Tracing", "6");
+            e.putString("Tracing", "60");
             e.putString("Sending", "3000");
             e.commit();
         }
