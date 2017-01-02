@@ -99,6 +99,8 @@ public class AMS_Service extends Service implements
     public void onCreate() {
         super.onCreate();
         dbm = new AMS_DBManager(this);
+        alm = new AMS_LocationManager(this,5);
+        alm.setListener(this);
         handler = new Handler();
         timer = new Timer();
         timer.schedule(new myTimer(), 0, 1000);
@@ -233,8 +235,6 @@ public class AMS_Service extends Service implements
         }
         tracingTime = Integer.parseInt(sp.getString("Tracing", "60"));
         sendingTime = Integer.parseInt(sp.getString("Sending", "3000"));
-        alm = new AMS_LocationManager(this,tracingTime);
-        alm.setListener(this);
         doTracing();
     }
 
@@ -250,6 +250,11 @@ public class AMS_Service extends Service implements
 
     private void doTracing() {
         if(requestDate == null){
+            requestDate = new Date();
+            alm.startUpdating();
+        }else{
+            alm.stopUpdating();
+            while (alm.isRequesting()){};
             requestDate = new Date();
             alm.startUpdating();
         }
