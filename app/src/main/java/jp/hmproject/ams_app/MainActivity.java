@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -23,7 +22,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.Calendar;
 
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                doCommand("TRACE_DATA");
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -159,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void bindAMSService(){
         Intent intent = new Intent(AMS_Remote.class.getName());
-        if(bindService(intent,connection,Context.BIND_AUTO_CREATE) != true){
+        if(!bindService(intent,connection,Context.BIND_AUTO_CREATE)){
             endApp();
         }
     }
@@ -175,10 +180,12 @@ public class MainActivity extends AppCompatActivity {
             String[] msgArray = msg.split(":");
             String status = msgArray[1];
             if (status.equals("INIT")) {
-
+                Toast.makeText(this,"Initialize",Toast.LENGTH_SHORT).show();
             }else if(msg.equals("END")) {
                 finish();
             }
+        }else if(msg.equals("TRACE_DATA")){
+            showTracedData(msg);
         }
     }
 
@@ -191,5 +198,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return super.dispatchKeyEvent(event);
+    }
+
+    public void showTracedData(String s){
+        TextView tv = (TextView)findViewById(R.id.test_result);
+        try {
+            JSONArray ja = new JSONArray(s);
+            String txt = "";
+            for(int i=0;i<ja.length();i++){
+                txt += ja.get(i).toString() + "\r\n";
+            }
+            tv.setText(txt);
+        }catch(JSONException e){
+            Log.e(TAG,"showTracedData:" + e.getMessage());
+        }
     }
 }
