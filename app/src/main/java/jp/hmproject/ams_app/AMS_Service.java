@@ -27,8 +27,7 @@ public class AMS_Service extends Service implements
 
     final String TAG = "AMS_Service";
     private final String[] status = {"FINISH", "INIT", "SUSPEND", "NORMAL"};
-    final RemoteCallbackList<AMS_Callback> callback_list =
-            new RemoteCallbackList<AMS_Callback>();
+    final RemoteCallbackList<AMS_Callback> callback_list = new RemoteCallbackList<AMS_Callback>();
     private int start_id;
     private SharedPreferences sp;
     private AMS_DBManager dbm;
@@ -46,8 +45,7 @@ public class AMS_Service extends Service implements
         // TODO: Return the communication channel to the service.
         if (AMS_Remote.class.getName().equals(intent.getAction())) {
             return binder;
-        }
-        ;
+        };
         return null;
     }
 
@@ -81,13 +79,13 @@ public class AMS_Service extends Service implements
     }
 
     private void finishTask() {
-        setLastActiveDate();
+        setLastActiveDate(new Date());
         sp.unregisterOnSharedPreferenceChangeListener(this);
         timer.cancel();
         timer = null;
         dbm.close();
         dbm = null;
-        stopLocationService();
+        stopUpdatingLocation();
         alm.close();
         alm = null;
         callback_list.kill();
@@ -99,8 +97,6 @@ public class AMS_Service extends Service implements
     public void onCreate() {
         super.onCreate();
         dbm = new AMS_DBManager(this);
-        alm = new AMS_LocationManager(this,5);
-        alm.setListener(this);
         handler = new Handler();
         timer = new Timer();
         timer.schedule(new myTimer(), 0, 1000);
@@ -153,10 +149,8 @@ public class AMS_Service extends Service implements
                 finishTask();
             } else if (v.equals("INIT")) {
                 initSetting();
-                startLocationService();
-                transitState("NORMAL");
             } else if (v.equals("SUSPEND")) {
-                stopLocationService();
+                stopUpdatingLocation();
             } else if (v.equals("NORMAL")) {
                 doTracing();
                 doSending();
@@ -165,21 +159,10 @@ public class AMS_Service extends Service implements
     }
     @Override
     public void changeLocationData() {
-        Location location = alm.getLocationData();
-        if(location != null) {
-            AMS_Data ams_data = new AMS_Data();
-            ams_data.setTraceData(location.getAccuracy(),location.getLatitude(),
-                    location.getLongitude(),new Date(location.getTime()),requestDate);
-            dbm.setTraceData(ams_data);
-            Log.d("TEST", "Location:" + location.getLatitude() + "," + location.getLongitude());
-            requestDate = null;
-        }else{
-            Log.d("TEST", "Can't get the location data.");
-        }
     }
     @Override
     public void locationServiceConnected() {
-        doTracing();
+        transitState("NORMAL");
     }
 
 
@@ -211,7 +194,6 @@ public class AMS_Service extends Service implements
         if(status.equals("")){
             transitState("INIT");
         }else if (status.equals("NORMAL")) {
-            if(!alm.isRequesting())startLocationService();
             int t = tracingTime - tCount > 0 ? tracingTime - tCount : 0;
             int s = sendingTime - sCount > 0 ? sendingTime - sCount : 0;
             if (t == 0) doTracing();
@@ -235,13 +217,14 @@ public class AMS_Service extends Service implements
         }
         tracingTime = Integer.parseInt(sp.getString("Tracing", "60"));
         sendingTime = Integer.parseInt(sp.getString("Sending", "3000"));
-        doTracing();
+        alm = new AMS_LocationManager(this);
+        alm.setListener(this);
     }
 
-    private void startLocationService(){
+    private void startUpdatingLocation(){
         alm.startUpdating();
     }
-    private void stopLocationService(){
+    private void stopUpdatingLocation(){
         alm.stopUpdating();
     }
     private void changeTracingInterval(){
@@ -249,15 +232,9 @@ public class AMS_Service extends Service implements
     }
 
     private void doTracing() {
-        if(requestDate == null){
-            requestDate = new Date();
-            alm.startUpdating();
-        }else{
-            alm.stopUpdating();
-            while (alm.isRequesting()){};
-            requestDate = new Date();
-            alm.startUpdating();
-        }
+        storeLocationData();
+        requestDate = new Date();
+        startUpdatingLocation();
         tCount = 0;
     }
 
@@ -266,14 +243,29 @@ public class AMS_Service extends Service implements
         broadcast("TRACE_DATA:" + s);
     }
 
+    private void storeLocationData(){
+        Location location = alm.getLocationData();
+        if(location != null) {
+            AMS_Data ams_data = new AMS_Data();
+            ams_data.setTraceData(location.getAccuracy(),location.getLatitude(),
+                    location.getLongitude(),new Date(location.getTime()),requestDate);
+            dbm.setTraceData(ams_data);
+            Log.d(TAG, "storeLocationData:requestDate:" + requestDate
+                    + " ,LAT:" + location.getLatitude()
+                    + " ,LON:" + location.getLongitude());
+        }else{
+            Log.d(TAG, "storeLocationData:Can't get the location data.");
+        }
+    }
+
     private void doSending() {
         sCount = 0;
     }
 
-    private void setLastActiveDate() {
+    private void setLastActiveDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         SharedPreferences.Editor e = sp.edit();
-        e.putString("LastActive", sdf.format(new Date()));
+        e.putString("LastActive", sdf.format(date));
         e.commit();
     }
 }
