@@ -159,6 +159,7 @@ public class AMS_Service extends Service implements
     }
     @Override
     public void changeLocationData() {
+        storeLocationData();
     }
     @Override
     public void locationServiceConnected() {
@@ -232,7 +233,6 @@ public class AMS_Service extends Service implements
     }
 
     private void doTracing() {
-        storeLocationData();
         requestDate = new Date();
         startUpdatingLocation();
         tCount = 0;
